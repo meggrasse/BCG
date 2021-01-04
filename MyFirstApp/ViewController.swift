@@ -9,33 +9,40 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    // TODO: Figure out why we need `viewDidAppear` here.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        self.loop()
+        self.strobe()
     }
     
-    func loop() {
-        // (1) show for loop syntax in swift and different range operators [... vs ..<],
-        // using print, so students can discern the difference.
-        for i in 0..<10 {
-            print(i)
-        }
+    func strobe() {
+        // (1) Show how to use `animate` to achieve a strobe light effect
+        UIView.animate(withDuration: 0.5, delay: 0, options: [], animations: {
+            self.view.backgroundColor = .green
+            self.view.backgroundColor = .blue
+        })
         
-        // (2) show how to use variables in Swift.
-        // `var` - show i can be assigned to a mutable var.
-        // `let` - variable's value can never change. Show how the compiler enforces this.
-        // Pause for 5 minutes to let students play on their own and get comfortable with the loop syntax.
-        var index = 0
-        for i in 0..<10 {
-            index = i
-            print(index)
-        }
+        // (2) Supply `.repeat`, and explain this is kind of like a for loop.
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.repeat], animations: {
+            self.view.backgroundColor = .green
+            self.view.backgroundColor = .blue
+        })
         
-        // (3) Introduce the `stride` function, so students can count by
-        // decimal increments and  count down.
-        for i in stride(from: 1, to: 0, by: -0.001) {
-            print(i)
+        // (3) Use random function to strobe a random color.
+        let range: Range<CGFloat> = Range(uncheckedBounds: (0.0, 1.0))
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.repeat], animations: {
+            self.view.backgroundColor = UIColor(
+                red: CGFloat.random(in: range),
+                green: CGFloat.random(in: range),
+                blue: CGFloat.random(in: range),
+                alpha: 1
+            )
+        })
+            
+        // (4?) If time permits, use a timer to stop animations.
+        let _ = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
+            self.view.layer.removeAllAnimations()
         }
     }
 }
