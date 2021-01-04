@@ -9,15 +9,15 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         self.colorRed()
     }
     
     func colorRed() {
-        self.view.backgroundColor = .red
+        // RGB is normalized on iOS.
+        self.view.backgroundColor = UIColor(red: 255 / 255, green: 0, blue: 0, alpha: 1)
     }
-
 }
 
