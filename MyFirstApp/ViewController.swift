@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     // As opposed to only being able to access in it `addYellowSubview`,
     // when it was locally defined there.
     let yellowSubview = UIView()
+    let timeLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +22,15 @@ class ViewController: UIViewController {
         self.addYellowSubview()
         self.addTimeLabel()
         self.strobe()
+        
+        // (4) Add a timer to update the label
+        // so it always shows the current time.
+
+        // Since our timeStyle is `.medium`, we only need to update it every second,
+        // since that's the most precision we'll ever display.
+        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            self.updateTime()
+        }
     }
     
     func addYellowSubview() {
@@ -43,22 +53,12 @@ class ViewController: UIViewController {
     }
     
     func addTimeLabel() {
-        // (3) Now, eventually we want to migrate this to a countdown timer app, so
-        // we should start by showing the current time.
-        
-        // The default initializer for `Date` corresponds to the current date + time.
-        let now = Date()
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .medium
-        
-        let nowText = dateFormatter.string(from: now)
-        
-        let timeLabel = UILabel()
-        timeLabel.text = nowText
         timeLabel.textColor = .white
         timeLabel.sizeToFit()
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.updateTime()
+        
         self.view.addSubview(timeLabel)
         
         // Since we used `sizeToFit` to size the view
@@ -71,6 +71,15 @@ class ViewController: UIViewController {
         ]
         
         NSLayoutConstraint.activate(constraints)
+    }
+
+    func updateTime() {
+        // The default initializer for `Date` corresponds to the current date + time.
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .medium
+        let nowText = dateFormatter.string(from: now)
+        timeLabel.text = nowText
     }
     
     func strobe() {
