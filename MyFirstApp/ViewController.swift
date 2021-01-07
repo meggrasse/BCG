@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         self.addYellowSubview()
-        self.addNameLabel()
+        self.addTimeLabel()
         self.strobe()
     }
     
@@ -42,22 +42,32 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-    func addNameLabel() {
-        // (2) Add label of your name to the view hierarchy.
-        let nameLabel = UILabel()
-        nameLabel.text = "Meg"
-        nameLabel.textColor = .white
-        nameLabel.sizeToFit()
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(nameLabel)
+    func addTimeLabel() {
+        // (3) Now, eventually we want to migrate this to a countdown timer app, so
+        // we should start by showing the current time.
+        
+        // The default initializer for `Date` corresponds to the current date + time.
+        let now = Date()
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .medium
+        
+        let nowText = dateFormatter.string(from: now)
+        
+        let timeLabel = UILabel()
+        timeLabel.text = nowText
+        timeLabel.textColor = .white
+        timeLabel.sizeToFit()
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(timeLabel)
         
         // Since we used `sizeToFit` to size the view
         // based on whatever we supply in `text`,
         // we don't need to set size constraints,
         // only constraints for the position of the label.
         let constraints = [
-            NSLayoutConstraint(item: nameLabel, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: nameLabel, attribute: .centerY, relatedBy: .equal, toItem: self.yellowSubview, attribute: .centerY, multiplier: 1, constant: -50),
+            NSLayoutConstraint(item: timeLabel, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: timeLabel, attribute: .centerY, relatedBy: .equal, toItem: self.yellowSubview, attribute: .centerY, multiplier: 1, constant: -50),
         ]
         
         NSLayoutConstraint.activate(constraints)
