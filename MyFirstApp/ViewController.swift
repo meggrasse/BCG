@@ -9,41 +9,37 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    // TODO: Figure out why we need `viewDidAppear` here.
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.addYellowSubview()
         self.strobe()
     }
     
+    func addYellowSubview() {
+        // (1) Add yellow subview to view hierarchy, and use constraints to orient it.
+        let yellowSubview = UIView()
+        yellowSubview.backgroundColor = .yellow
+        
+        // We must set `translatesAutoresizingMaskIntoConstraints` to false so we can specify our own constraints.
+        // Otherwise, we'll have conflicting constraints.
+        yellowSubview.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(yellowSubview)
+
+        let constraints = [
+            NSLayoutConstraint(item: yellowSubview, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0, constant: 50),
+            NSLayoutConstraint(item: yellowSubview, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0, constant: 50),
+            NSLayoutConstraint(item: yellowSubview, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: yellowSubview, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1, constant: 0)
+        ]
+
+        NSLayoutConstraint.activate(constraints)
+    }
+    
     func strobe() {
-        // (1) Show how to use `animate` to achieve a strobe light effect
-        UIView.animate(withDuration: 0.5, delay: 0, options: [], animations: {
-            self.view.backgroundColor = .green
-            self.view.backgroundColor = .blue
-        })
-        
-        // (2) Supply `.repeat`, and explain this is kind of like a for loop.
         UIView.animate(withDuration: 0.5, delay: 0, options: [.repeat], animations: {
             self.view.backgroundColor = .green
             self.view.backgroundColor = .blue
         })
-        
-        // (3) Use random function to strobe a random color.
-        let range: Range<CGFloat> = Range(uncheckedBounds: (0.0, 1.0))
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.repeat], animations: {
-            self.view.backgroundColor = UIColor(
-                red: CGFloat.random(in: range),
-                green: CGFloat.random(in: range),
-                blue: CGFloat.random(in: range),
-                alpha: 1
-            )
-        })
-            
-        // (4?) If time permits, use a timer to stop animations.
-        let _ = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
-            self.view.layer.removeAllAnimations()
-        }
     }
 }
-
