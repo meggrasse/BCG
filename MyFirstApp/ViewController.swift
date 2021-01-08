@@ -10,14 +10,16 @@ import UIKit
 class ViewController: UIViewController {
 
     let timeLabel = UILabel()
+    let timerTextField = UITextField()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.addTimeLabel()
+        self.addTimerTextField()
 
         // (2) Navigate to the TimesUpViewController 5 seconds after loading the view.
-        let timesUpTime = Date(timeIntervalSinceNow: 5)
+        let timesUpTime = Date(timeIntervalSinceNow: 20)
         // Since our timeStyle is `.medium`, we only need to update it every second,
         // since that's the most precision we'll ever display.
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
@@ -55,6 +57,28 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
 
+    func addTimerTextField() {
+        // (1) Add a UITextField to allow a user to optionally name the timer.
+        // Follow along in the docs to understand how to reference documentation:
+        // https://developer.apple.com/documentation/uikit/uitextfield
+        
+        timerTextField.placeholder = "Name of Countdown Timer"
+        timerTextField.textColor = .white
+        timerTextField.sizeToFit()
+        timerTextField.returnKeyType = .done
+        timerTextField.textAlignment = .center
+        timerTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addSubview(timerTextField)
+
+        let constraints = [
+            NSLayoutConstraint(item: timerTextField, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: timerTextField, attribute: .centerY, relatedBy: .equal, toItem: self.timeLabel, attribute: .centerY, multiplier: 1, constant: -50),
+        ]
+        
+        NSLayoutConstraint.activate(constraints)
+    }
+
     func updateTimeUI() {
         // The default initializer for `Date` corresponds to the current date + time.
         let now = Date()
@@ -68,6 +92,7 @@ class ViewController: UIViewController {
         let now = Date()
         if now.timeIntervalSince(timesUpTime) > 0 {
             let destinationViewController = TimesUpViewController()
+            destinationViewController.title = self.timerTextField.text
             // By navigating to the destinationViewController for free the system configures
             // a navigation bar UI for free, including a back button.
             self.navigationController?.pushViewController(destinationViewController, animated: true)

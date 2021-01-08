@@ -7,7 +7,6 @@
 
 import UIKit
 
-// (2) Create + customize a new VC you'll show when a certain time is reached.
 class TimesUpViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -15,7 +14,6 @@ class TimesUpViewController: UIViewController {
         
         self.view.backgroundColor = .cyan
 
-        self.title = "Happy 2021!"
         let label = UILabel()
         label.text = "⏰ 2020 you will not be missed! ⏰"
         label.sizeToFit()
