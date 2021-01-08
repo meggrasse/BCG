@@ -8,23 +8,14 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-    // This defines `yellowSubview` as a property scoped to ViewController,
-    // which means we can access it anywhere in this class.
-    // As opposed to only being able to access in it `addYellowSubview`,
-    // when it was locally defined there.
-    let yellowSubview = UIView()
+
     let timeLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.addYellowSubview()
         self.addTimeLabel()
-        self.strobe()
-        
-        // (4) Add a timer to update the label
-        // so it always shows the current time.
+        self.addNavigationButton()
 
         // Since our timeStyle is `.medium`, we only need to update it every second,
         // since that's the most precision we'll ever display.
@@ -33,23 +24,12 @@ class ViewController: UIViewController {
         }
     }
     
-    func addYellowSubview() {
-        // (1) Add yellow subview to view hierarchy, and use constraints to orient it.
-        self.yellowSubview.backgroundColor = .yellow
-
-        // We must set `translatesAutoresizingMaskIntoConstraints` to false so we can specify our own constraints.
-        // Otherwise, we'll have conflicting constraints.
-        self.yellowSubview.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(yellowSubview)
-
-        let constraints = [
-            NSLayoutConstraint(item: yellowSubview, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0, constant: 50),
-            NSLayoutConstraint(item: yellowSubview, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0, constant: 50),
-            NSLayoutConstraint(item: yellowSubview, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: yellowSubview, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1, constant: 0)
-        ]
-
-        NSLayoutConstraint.activate(constraints)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Move `strobe` to `viewWillAppear` which is called when the user
+        // presses the back button to restart the animation (as opposed to
+        // `viewDidLoad()`, which is only called the first time the view loads).
+        self.strobe()
     }
     
     func addTimeLabel() {
@@ -67,7 +47,30 @@ class ViewController: UIViewController {
         // only constraints for the position of the label.
         let constraints = [
             NSLayoutConstraint(item: timeLabel, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: timeLabel, attribute: .centerY, relatedBy: .equal, toItem: self.yellowSubview, attribute: .centerY, multiplier: 1, constant: -50),
+            NSLayoutConstraint(item: timeLabel, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1, constant: -50),
+        ]
+        
+        NSLayoutConstraint.activate(constraints)
+    }
+    
+    func addNavigationButton() {
+        let action = UIAction(title: "Navigate") { _ in
+            let destinationViewController = UIViewController()
+            destinationViewController.view.backgroundColor = .purple
+            // By navigating to the destinationViewController for free the system configures
+            // a navigation bar UI for free, including a back button.
+            self.navigationController?.pushViewController(destinationViewController, animated: true)
+        }
+        
+        let navigationButton = UIButton(type: .system, primaryAction: action)
+        navigationButton.translatesAutoresizingMaskIntoConstraints = false
+        navigationButton.tintColor = .orange
+        navigationButton.sizeToFit()
+        self.view.addSubview(navigationButton)
+        
+        let constraints = [
+            NSLayoutConstraint(item: navigationButton, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: navigationButton, attribute: .centerY, relatedBy: .equal, toItem: self.timeLabel, attribute: .centerY, multiplier: 1, constant: -50),
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -83,7 +86,9 @@ class ViewController: UIViewController {
     }
     
     func strobe() {
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.repeat], animations: {
+        // (1.2) Include the `.allowUserInteraction` option so our `navigationButton` is clickable
+        // while the superview is animating.
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.repeat, .allowUserInteraction], animations: {
             self.view.backgroundColor = .green
             self.view.backgroundColor = .blue
         })

@@ -21,9 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(frame: scene.coordinateSpace.bounds)
         window.windowScene = scene
         
+        // (1.1) Create a Navigation Controller using ViewController as the root.
         let viewController = ViewController()
+        let navigationController = UINavigationController(rootViewController: viewController)
 
-        window.rootViewController = viewController
+        window.rootViewController = navigationController
         window.makeKeyAndVisible() // This makes this `window` receive touches + sit in front of all other windows.
         
         self.window = window
