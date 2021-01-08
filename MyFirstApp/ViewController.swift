@@ -11,20 +11,20 @@ class ViewController: UIViewController {
 
     let timeLabel = UILabel()
     let timerTextField = UITextField()
+    let datePicker = UIDatePicker()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.addTimeLabel()
         self.addTimerTextField()
+        self.addDatePicker()
 
-        // (2) Navigate to the TimesUpViewController 5 seconds after loading the view.
-        let timesUpTime = Date(timeIntervalSinceNow: 20)
         // Since our timeStyle is `.medium`, we only need to update it every second,
         // since that's the most precision we'll ever display.
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.updateTimeUI()
-            self.navigateIfNeeded(timesUpTime: timesUpTime, timer: timer)
+            self.navigateIfNeeded(timer: timer)
         }
     }
     
@@ -78,7 +78,24 @@ class ViewController: UIViewController {
         
         NSLayoutConstraint.activate(constraints)
     }
-
+    
+    func addDatePicker() {
+        // (2) Add a date picker with which user can specify when they want
+        // the countdown timer to fire.
+        // Follow along in docs:
+        // https://developer.apple.com/documentation/uikit/uidatepicker
+        
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addSubview(datePicker)
+        
+        let constraints = [
+            NSLayoutConstraint(item: datePicker, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: datePicker, attribute: .top, relatedBy: .equal, toItem: self.timeLabel, attribute: .bottom, multiplier: 1, constant: 50)
+        ]
+        NSLayoutConstraint.activate(constraints)
+    }
+    
     func updateTimeUI() {
         // The default initializer for `Date` corresponds to the current date + time.
         let now = Date()
@@ -88,8 +105,10 @@ class ViewController: UIViewController {
         timeLabel.text = nowText
     }
     
-    func navigateIfNeeded(timesUpTime: Date, timer: Timer) {
+    func navigateIfNeeded(timer: Timer) {
         let now = Date()
+        let timesUpTime = self.datePicker.date
+        
         if now.timeIntervalSince(timesUpTime) > 0 {
             let destinationViewController = TimesUpViewController()
             destinationViewController.title = self.timerTextField.text
