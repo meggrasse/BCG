@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		94486C7A25A809E700773EBF /* TimesUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94486C7925A809E700773EBF /* TimesUpViewController.swift */; };
 		94A224C4257F0EC200D87A65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A224C3257F0EC200D87A65 /* AppDelegate.swift */; };
 		94A224C6257F0EC200D87A65 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A224C5257F0EC200D87A65 /* SceneDelegate.swift */; };
 		94A224C8257F0EC200D87A65 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A224C7257F0EC200D87A65 /* ViewController.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		94486C7925A809E700773EBF /* TimesUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimesUpViewController.swift; sourceTree = "<group>"; };
 		94A224C0257F0EC200D87A65 /* MyFirstApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFirstApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A224C3257F0EC200D87A65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94A224C5257F0EC200D87A65 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 				94A224C3257F0EC200D87A65 /* AppDelegate.swift */,
 				94A224C5257F0EC200D87A65 /* SceneDelegate.swift */,
 				94A224C7257F0EC200D87A65 /* ViewController.swift */,
+				94486C7925A809E700773EBF /* TimesUpViewController.swift */,
 				94A224CC257F0EC300D87A65 /* Assets.xcassets */,
 				94A224CE257F0EC300D87A65 /* LaunchScreen.storyboard */,
 				94A224D1257F0EC300D87A65 /* Info.plist */,
@@ -133,6 +136,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94486C7A25A809E700773EBF /* TimesUpViewController.swift in Sources */,
 				94A224C8257F0EC200D87A65 /* ViewController.swift in Sources */,
 				94A224C4257F0EC200D87A65 /* AppDelegate.swift in Sources */,
 				94A224C6257F0EC200D87A65 /* SceneDelegate.swift in Sources */,

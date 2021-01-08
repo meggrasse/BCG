@@ -15,12 +15,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         self.addTimeLabel()
-        self.addNavigationButton()
 
+        // (2) Navigate to the TimesUpViewController 5 seconds after loading the view.
+        let timesUpTime = Date(timeIntervalSinceNow: 5)
         // Since our timeStyle is `.medium`, we only need to update it every second,
         // since that's the most precision we'll ever display.
-        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            self.updateTime()
+        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            self.updateTimeUI()
+            self.navigateIfNeeded(timesUpTime: timesUpTime, timer: timer)
         }
     }
     
@@ -37,7 +39,7 @@ class ViewController: UIViewController {
         timeLabel.sizeToFit()
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        self.updateTime()
+        self.updateTimeUI()
         
         self.view.addSubview(timeLabel)
         
@@ -52,28 +54,27 @@ class ViewController: UIViewController {
         
         NSLayoutConstraint.activate(constraints)
     }
+
+    func updateTimeUI() {
+        // The default initializer for `Date` corresponds to the current date + time.
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .medium
+        let nowText = dateFormatter.string(from: now)
+        timeLabel.text = nowText
+    }
     
-    func addNavigationButton() {
-        let action = UIAction(title: "Navigate") { _ in
-            let destinationViewController = UIViewController()
-            destinationViewController.view.backgroundColor = .purple
+    func navigateIfNeeded(timesUpTime: Date, timer: Timer) {
+        let now = Date()
+        if now.timeIntervalSince(timesUpTime) > 0 {
+            let destinationViewController = TimesUpViewController()
             // By navigating to the destinationViewController for free the system configures
             // a navigation bar UI for free, including a back button.
             self.navigationController?.pushViewController(destinationViewController, animated: true)
+            
+            // Invalidate our timer so it doesn't continue to fire and navigate to TimesUpViewController
+            timer.invalidate()
         }
-        
-        let navigationButton = UIButton(type: .system, primaryAction: action)
-        navigationButton.translatesAutoresizingMaskIntoConstraints = false
-        navigationButton.tintColor = .orange
-        navigationButton.sizeToFit()
-        self.view.addSubview(navigationButton)
-        
-        let constraints = [
-            NSLayoutConstraint(item: navigationButton, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: navigationButton, attribute: .centerY, relatedBy: .equal, toItem: self.timeLabel, attribute: .centerY, multiplier: 1, constant: -50),
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
     }
 
     func updateTime() {
